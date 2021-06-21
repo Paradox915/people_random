@@ -2,6 +2,7 @@
 # Hugh Smith
 
 # imports
+# json import for getting data into a usable format
 import json
 
 # classes
@@ -47,24 +48,24 @@ class Person:
 
     # return the location
     def get_location(self):
-        return (self.latitude, self.longitude)
+        return ([self.latitude, self.longitude])
 
 
 # functions
 
 # get and return some ammount of people
-def get_people(ammount = 5000): # defult value of 5000
+def get_people(ammount = 5000): # defult value of 5000 because of the ammount of data in the text file
     '''
     @param : int
     @returns list
     @throws : valueError
     '''
-    # check if the inputed value is over 5000 the max
+    # check if the inputed value is over the  5000 max
     if ammount > 5000:
         ammount = 5000
     
-    # get the data from the text file in json formating
-    with open("people_txt.txt") as data_txt:
+    # get the data from the text file in json formating with latin encoding
+    with open("people_txt.txt","r", encoding = "latin-1:") as data_txt:
         data = json.load(data_txt)
         data = data["results"]
     
@@ -73,6 +74,7 @@ def get_people(ammount = 5000): # defult value of 5000
 
     # add the people into the data base
     for person in data:
+        # get all of the atrabutes out of the json file
         gender = person["gender"]
         title = person["name"]["title"]
         first = person["name"]["first"]
@@ -102,7 +104,7 @@ def get_people(ammount = 5000): # defult value of 5000
         picture = person["picture"]["large"]
         nat = person["nat"]
 
-
+        # add the person into the data base
         people_db.append(Person(gender, title, first, last, street, city, state,
      postcode, latitude, longitude, offset, description, email, uuid, 
      username, password, salt, md5, sha1, sha256, date, age,
@@ -114,10 +116,9 @@ def get_people(ammount = 5000): # defult value of 5000
 
 
 
-
 # main routine
 
 # testing
 if __name__ == "__main__":
     people_db = get_people(5000)
-    print(people_db[600].get_name())    
+    print(people_db[600].get_location())    
